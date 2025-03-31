@@ -1,5 +1,4 @@
-wasm-tools component embed wit hello-module.wat | wasm-tools component new > hello-component.wasm
+wasm-tools component embed wit module.wat | wasm-tools component new > component.wasm
 
-wasmtime run hello-component.wasm
-
-wasmtime run --invoke "run()" hello-component.wasm
+wasmtime run --invoke "run()" component.wasm
+wasmtime run component.wasm

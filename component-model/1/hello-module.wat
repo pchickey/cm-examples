@@ -1,16 +1,31 @@
 (module
-  (import "wasi:cli/stdout@0.2.3" "get-stdout"
-    (func $get-stdout (result i32)))
-  (import "wasi:io/streams@0.2.3" "[method]output-stream.blocking-write-and-flush"
-    (func $blocking-write-and-flush (param i32 i32 i32 i32)))
+
   (memory (export "memory") 1)
-  (func (export "wasi:cli/run@0.2.3#run") (result i32)
-    call $get-stdout
-    i32.const 100
-    i32.const 15
-    i32.const 96
-    call $blocking-write-and-flush
+
+  (func (export "example:hello/say#hello") (param i32 i32) (result i32)
+    ;; String pointer is stored at 0
     i32.const 0
   )
-  (data (i32.const 100) "Hello, world!\n")
+
+  (func (export "cabi_realloc")
+        (param $origPtr i32)
+        (param $origSize i32)
+        (param $align i32)
+        (param $newSize i32)
+        (result i32)
+        (local $ptr i32)
+
+    ;; store the new strlen at 4
+    i32.const 4
+    local.get $newSize
+    i32.const 7
+    i32.add
+    i32.store
+
+    ;; Return pointer to write the string at
+    i32.const 0xf7
+  )
+
+  (data (i32.const 0) "\f0\00\00\00")
+  (data (i32.const 0xf0) "Hello, ")
 )

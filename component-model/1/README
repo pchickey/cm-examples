@@ -1,0 +1,7 @@
+cd rust
+cargo build --target wasm32-wasip2
+cd ..
+wasmtime run --invoke "hello(\"pat\")" rust/target/wasm32-wasip2/rust.wasm
+
+wasm-tools component embed wit hello-module.wat | wasm-tools component new > hello-component.wasm
+wasmtime run --invoke "hello(\"pat\")" hello-component.wasm

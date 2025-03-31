@@ -1,0 +1,9 @@
+package example:hello;
+
+interface say {
+    hello: func(name: string) -> string;
+}
+
+world hello {
+    export say;
+}

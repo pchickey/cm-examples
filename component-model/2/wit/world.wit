@@ -1,0 +1,5 @@
+package example:hello;
+
+world hello {
+    include wasi:cli/command@0.2.4;
+}

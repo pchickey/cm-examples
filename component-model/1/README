@@ -1,10 +1,12 @@
 wasm-tools component wit wit/world.wit --wat
 
+wasm-tools component embed wit module.wat | wasm-tools component new > component.wasm
+wasmtime run --invoke "hello(\"pat\")" component.wasm
+
 
 cd rust
 cargo build --target wasm32-wasip2
+cargo doc --open
 cd ..
 wasmtime run --invoke "hello(\"pat\")" rust/target/wasm32-wasip2/rust.wasm
 
-wasm-tools component embed wit module.wat | wasm-tools component new > component.wasm
-wasmtime run --invoke "hello(\"pat\")" component.wasm

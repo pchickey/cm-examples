@@ -1,6 +1,7 @@
 package example:hello;
 
 interface say {
+    // Greets someone by name
     hello: func(name: string) -> string;
 }
 

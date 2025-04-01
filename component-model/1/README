@@ -1,3 +1,6 @@
+wasm-tools component wit wit/world.wit --wat
+
+
 cd rust
 cargo build --target wasm32-wasip2
 cd ..

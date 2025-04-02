@@ -1,5 +1,7 @@
 
-# Wit
+# Example 1: Basic use of wit and components
+
+## Wit
 
 This example defines its own very small wit world. It lives at `wit/world.wit`.
 
@@ -7,7 +9,7 @@ By convention, we put wits in a folder named `wit`. Inside that, we can have any
 of wit files that are all part of the same wit package.
 
 
-## Wit defines a component type
+### Aside: Wit defines a component type
 
 Wit is a format that is designed for humans to read and write. It can be translated back
 and forth between a component binary, or the component binary's text wat format. The

@@ -7,7 +7,7 @@ struct S;
 export!(S);
 
 // Implement the requirements for the exports
-impl exports::example::hello::say::Guest for S {
+impl exports::example::first::say::Guest for S {
     fn hello(name: String) -> String {
         format!("Hello, {name}")
     }

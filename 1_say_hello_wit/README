@@ -1,12 +1,80 @@
-wasm-tools component wit wit/world.wit --wat
 
-wasm-tools component embed wit module.wat | wasm-tools component new > component.wasm
+# Wit
+
+This example defines its own very small wit world. It lives at `wit/world.wit`.
+
+By convention, we put wits in a folder named `wit`. Inside that, we can have any number
+of wit files that are all part of the same wit package.
+
+
+## Wit defines a component type
+
+Wit is a format that is designed for humans to read and write. It can be translated back
+and forth between a component binary, or the component binary's text wat format. The
+translation round-trips, and doc comments are carried in the binary.
+
+```sh
+wasm-tools component wit wit/ --wat
+```
+
+# Implementing a Component by hand
+
+The wasm module `module.wat` has almost everything we need to make a component:
+
+* It exports `cabi_realloc` to use as an allocator
+* It exports the `hello` func
+
+All we need to make this module a component is the component type information,
+which lives in our wit.
+
+As a facility to work with existing toolchains, we can put that type
+information into a custom section in our module. (Many of these custom
+sections can be present.)
+
+```sh
+wasm-tools component embed wit/ module.wat > module-typed.wasm
+```
+
+Then, this module can be transformed into a component:
+
+```sh
+wasm-tools component new module-typed.wasm > component.wasm
+```
+
+Finally, we can execute the component with the wasmtime CLI:
+
+```sh
 wasmtime run --invoke "hello(\"pat\")" component.wasm
+```
 
+# Implementing a component in Rust
 
+I made a really simple Rust guest to show how we use the `wit-bindgen` crate
+to generate guest bindings, and use them.
+
+You can see the source at `rust/src/main.rs`.
+
+To build a module:
+
+```sh
 cd rust
-cargo build --target wasm32-wasip2
+cargo build --target wasm32-unknown-unknown
 cargo doc --open
 cd ..
-wasmtime run --invoke "hello(\"pat\")" rust/target/wasm32-wasip2/rust.wasm
+```
+
+Then, to convert the module to a component:
+
+```sh
+wasm-tools component new rust/target/wasm32-unknown-unknown/debug/rust.wasm > rust-component.wasm
+```
+
+We don't need to `wasm-tools component embed` this component with the type
+information- wit-bindgen did that for us.
+
+Finally, we can execute it the exact same way with the wasmtime cli:
+
+```sh
+wasmtime run --invoke "hello(\"pat\")" rust-component.wasm
+```
 

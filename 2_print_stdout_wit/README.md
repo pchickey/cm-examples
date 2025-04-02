@@ -53,3 +53,36 @@ as the CLI's return code (0 or 1) instead of printing it.
 ```sh
 wasmtime run component.wasm
 ```
+
+## Using Rust to target WASI
+
+Rust supports compiling components directly for WASI 0.2.
+
+In the subdir `rust`, we have a trivial Rust project: it was created with
+`cargo init --bin .`.
+
+Build it with `cargo build --target wasm32-wasip2`. This will produce a
+component at `target/wasm32-wasip2/debug/rust.wasm`. You can `wasmtime run`
+it.
+
+We can even make `cargo run` and `cargo test` automatically run the executable
+and tests under wasmtime. Create a `.cargo` directory and create the file
+`.cargo/config.toml` containing:
+
+```toml
+[build]
+target = "wasm32-wasip2"
+[target.wasm32-wasip2]
+runner = "wasmtime run"
+```
+
+Now cargo will automatically build for WASIp2, and run with wasmtime:
+
+```sh
+% cargo run
+   Compiling rust v0.1.0 (/Users/p.hickey/src/component-examples/2_print_stdout_wit/rust)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.47s
+     Running `wasmtime run target/wasm32-wasip2/debug/rust.wasm`
+Hello, world!
+```
+
